@@ -1,8 +1,12 @@
 package com.gmsbank.service;
 
+import com.gmsbank.model.Usuarios;
+import com.gmsbank.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -22,6 +26,25 @@ public class AuthService {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    public Usuarios autenticar(String email, String senha) {
+        Optional<Usuarios> usuarioOptional = usuarioRepository.findByEmail_usuarios(email);
+        if (usuarioOptional.isEmpty()) {
+            return null;
+        } else {
+            String hex = gerarMD5(senha);
+
+            if ( usuarioOptional.get().getSenha_hash().equals(hex)) {
+                return usuarioOptional.get();
+            } else {
+                return null;
+            }
+
         }
     }
 }
