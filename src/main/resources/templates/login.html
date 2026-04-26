@@ -1,10 +1,527 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMS Bank — Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --gold-dark: #8B6914;
+            --black: #0A0A0F;
+            --surface: #12121A;
+            --surface2: #1C1C28;
+            --border: rgba(201,168,76,0.2);
+            --text: #F0EDE6;
+            --text-muted: #7A7870;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* LEFT PANEL */
+        .left-panel {
+            width: 55%;
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,168,76,0.12) 0%, transparent 60%),
+                    radial-gradient(ellipse 50% 80% at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 50%);
+        }
+
+        .grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                    linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--black);
+        }
+
+        .brand-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 0.05em;
+            color: var(--text);
+        }
+
+        .brand-name span { color: var(--gold); }
+
+        .hero-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(40px, 4vw, 64px);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 28px;
+            color: var(--text);
+        }
+
+        .hero-title .accent {
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 400px;
+            margin-bottom: 56px;
+        }
+
+        /* STATS ROW */
+        .stats-row {
+            display: flex;
+            gap: 40px;
+        }
+
+        .stat {
+            border-left: 2px solid var(--border);
+            padding-left: 20px;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* DECORATIVE CARDS */
+        .deco-cards {
+            position: absolute;
+            bottom: 60px;
+            right: -20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0.6;
+        }
+
+        .deco-card {
+            width: 220px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .deco-card-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+        .deco-card-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+        .deco-card-change { font-size: 12px; color: #4CAF50; margin-top: 4px; }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            width: 45%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 70px;
+            background: var(--black);
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            margin-bottom: 48px;
+        }
+
+        .login-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ERROR MESSAGE */
+        .error-msg {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: #ff6b7a;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .error-msg.show { display: block; }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder { color: var(--text-muted); }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.04);
+            box-shadow: 0 0 0 4px rgba(201,168,76,0.08);
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -12px;
+            margin-bottom: 32px;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: var(--gold);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .forgot-link:hover { opacity: 1; }
+
+        /* BUTTON */
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-login:hover::before { opacity: 1; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.35); }
+        .btn-login:active { transform: translateY(0); }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .divider-line { flex: 1; height: 1px; background: var(--border); }
+        .divider-text { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+        /* SECURE BADGE */
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .secure-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .version-tag {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+    </style>
 </head>
 <body>
 
+<!-- LEFT PANEL -->
+<div class="left-panel">
+    <div class="grid-bg"></div>
+    <div class="left-content">
+        <div class="brand">
+            <div class="brand-icon">G</div>
+            <div class="brand-name">GMS <span>BANK</span></div>
+        </div>
+
+        <div class="hero-area">
+            <div class="eyebrow">Sistema de Gestão Bancária</div>
+            <h1 class="hero-title">
+                Controle total<br>
+                das suas <span class="accent">operações</span><br>
+                financeiras.
+            </h1>
+            <p class="hero-desc">
+                Gerencie clientes, contas e transações com segurança e eficiência em uma plataforma centralizada.
+            </p>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Seguro</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Disponível</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">MD5</div>
+                    <div class="stat-label">Criptografia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="deco-cards">
+        <div class="deco-card">
+            <div class="deco-card-label">Saldo Total</div>
+            <div class="deco-card-value">R$ 1.025.200</div>
+            <div class="deco-card-change">↑ 2.4% este mês</div>
+        </div>
+        <div class="deco-card">
+            <div class="deco-card-label">Transações Hoje</div>
+            <div class="deco-card-value">47</div>
+            <div class="deco-card-change">↑ 12% vs ontem</div>
+        </div>
+    </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+    <div class="login-box">
+        <div class="login-header">
+            <h2 class="login-title">Bem-vindo de volta</h2>
+            <p class="login-subtitle">Faça login para acessar o painel de controle</p>
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        <div class="error-msg" th:if="${erro}" th:text="${erro}"></div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail</label>
+                <div class="form-input-wrapper">
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input"
+                            placeholder="seu@email.com"
+                            required
+                    />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="senha">Senha</label>
+                <div class="form-input-wrapper">
+                    <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            class="form-input"
+                            placeholder="••••••••"
+                            required
+                    />
+                    <span class="input-icon" onclick="toggleSenha()">👁</span>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <a href="#" class="forgot-link">Esqueceu a senha?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Entrar no Sistema</button>
+        </form>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-text">Acesso restrito a funcionários</div>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="secure-badge">
+            <div class="dot"></div>
+            Conexão segura — SSL/TLS ativo
+        </div>
+
+        <div class="version-tag">GMS Bank v1.0.0 — Sistema Interno</div>
+    </div>
+</div>
+
+<script>
+    function toggleSenha() {
+        const input = document.getElementById('senha');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+</script>
 </body>
 </html>
