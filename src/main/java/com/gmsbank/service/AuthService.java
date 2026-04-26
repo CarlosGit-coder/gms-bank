@@ -33,7 +33,7 @@ public class AuthService {
     private UsuarioRepository usuarioRepository;
 
     public Usuarios autenticar(String email, String senha) {
-        Optional<Usuarios> usuarioOptional = usuarioRepository.findByEmail_usuarios(email);
+        Optional<Usuarios> usuarioOptional = usuarioRepository.findByEmail(email);
         if (usuarioOptional.isEmpty()) {
             return null;
         } else {
