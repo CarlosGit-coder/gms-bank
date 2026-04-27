@@ -5,6 +5,7 @@ import com.gmsbank.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class AuthService {
     public static String gerarMD5(String senha) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hash = md.digest(senha.getBytes());
+            byte[] hash = md.digest(senha.getBytes(StandardCharsets.UTF_8));
 
             StringBuilder hex = new StringBuilder();
 
@@ -34,17 +35,24 @@ public class AuthService {
 
     public Usuarios autenticar(String email, String senha) {
         Optional<Usuarios> usuarioOptional = usuarioRepository.findByEmail(email);
+        System.out.println("Senha recebida: [" + senha + "]");
+        System.out.println("Tamanho: " + senha.length());
         if (usuarioOptional.isEmpty()) {
             return null;
-        } else {
-            String hex = gerarMD5(senha);
-
-            if ( usuarioOptional.get().getSenha_hash().equals(hex)) {
-                return usuarioOptional.get();
-            } else {
-                return null;
-            }
-
         }
+
+        Usuarios usuario = usuarioOptional.get();
+        String hashSenha = gerarMD5(senha);
+        String hashBanco = usuario.getSenha_hash().trim().toLowerCase();
+        String hashGerado = hashSenha.trim().toLowerCase();
+
+        System.out.println("Hash gerado:  [" + hashGerado + "]");
+        System.out.println("Hash no banco:[" + hashBanco + "]");
+        System.out.println("Iguais: " + hashGerado.equals(hashBanco));
+
+        if (hashGerado.equals(hashBanco)) {
+            return usuario;
+        }
+        return null;
     }
 }
