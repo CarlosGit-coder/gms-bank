@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMS Bank — Clientes & Contas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --gold: #C9A84C; --gold-light: #E8C97A; --gold-dark: #8B6914;
+            --black: #0A0A0F; --surface: #12121A; --surface2: #1C1C28; --surface3: #242433;
+            --border: rgba(201,168,76,0.15); --text: #F0EDE6; --text-muted: #6A6870;
+            --green: #4CAF50; --red: #F44336; --sidebar-w: 260px;
+        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--text); min-height: 100vh; display: flex; }
+        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; }
+        .sidebar-brand { padding: 32px 28px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .brand-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); flex-shrink: 0; }
+        .brand-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+        .brand-text span { color: var(--gold); }
+        .nav-section { padding: 24px 16px 8px; }
+        .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 0 12px; margin-bottom: 8px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: all 0.2s ease; margin-bottom: 2px; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+        .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+        .sidebar-footer { margin-top: auto; padding: 20px 16px; border-top: 1px solid var(--border); }
+        .user-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border); }
+        .user-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--black); flex-shrink: 0; }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name { font-size: 13px; font-weight: 500; }
+        .user-role { font-size: 11px; color: var(--gold); }
+        .logout-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; padding: 4px; transition: color 0.2s; }
+        .logout-btn:hover { color: var(--red); }
+        .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+        .topbar { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--black); position: sticky; top: 0; z-index: 50; }
+        .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
+        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .content { padding: 40px; flex: 1; }
+        .search-bar { display: flex; gap: 16px; margin-bottom: 28px; }
+        .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: all 0.2s; }
+        .search-input::placeholder { color: var(--text-muted); }
+        .search-input:focus { border-color: var(--gold); }
+        .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .table-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .table-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+        .table-count { font-size: 13px; color: var(--text-muted); }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        td { padding: 16px 20px; font-size: 14px; border-bottom: 1px solid rgba(201,168,76,0.05); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(201,168,76,0.02); }
+        .conta-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-size: 12px; font-family: monospace; color: var(--gold); }
+        .saldo-positivo { color: var(--green); font-weight: 500; }
+        .empty-state { text-align: center; padding: 60px; color: var(--text-muted); }
+        .empty-icon { font-size: 40px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon">G</div>
+        <div class="brand-text">GMS <span>BANK</span></div>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <a href="/dashboard" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="/clientes" class="nav-item active"><span class="nav-icon">👤</span> Clientes</a>
+        <a href="/contas" class="nav-item"><span class="nav-icon">🏦</span> Contas</a>
+        <a href="/transacoes" class="nav-item"><span class="nav-icon">💸</span> Transações</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Gestão</div>
+        <a href="/usuarios" class="nav-item"><span class="nav-icon">👥</span> Usuários</a>
+        <a href="/relatorios" class="nav-item"><span class="nav-icon">📈</span> Relatórios</a>
+    </div>
+    <div class="sidebar-footer">
+        <div class="user-card">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+                <div class="user-name">Administrador</div>
+                <div class="user-role">Admin</div>
+            </div>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button class="logout-btn" type="submit">⏻</button>
+            </form>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <div>
+            <div class="page-title">Clientes & Contas</div>
+            <div class="page-subtitle">Visualização consolidada — clientes com suas contas bancárias</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="🔍  Buscar por nome ou número da conta..." id="searchInput" onkeyup="filtrarTabela()">
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <div>
+                    <div class="table-title">Clientes com Contas</div>
+                    <div class="table-count" th:text="${#lists.size(dados)} + ' registros encontrados'">0 registros</div>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table id="dadosTable">
+                    <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Número da Conta</th>
+                        <th>Saldo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row : ${dados}">
+                        <td th:text="${row[0]}">Nome</td>
+                        <td><span class="conta-chip" th:text="${row[1]}">0000-0</span></td>
+                        <td class="saldo-positivo" th:text="'R$ ' + ${#numbers.formatDecimal(row[2], 1, 'POINT', 2, 'COMMA')}">R$ 0,00</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(dados)}">
+                        <td colspan="3">
+                            <div class="empty-state">
+                                <div class="empty-icon">🏦</div>
+                                <p>Nenhum dado encontrado.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filtrarTabela() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#dadosTable tbody tr');
+        rows.forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(input) ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>
