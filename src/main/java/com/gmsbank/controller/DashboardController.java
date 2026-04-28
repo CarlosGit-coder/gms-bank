@@ -5,8 +5,8 @@ import com.gmsbank.repository.ContasRepository;
 import com.gmsbank.repository.TransacoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DashboardController {
@@ -21,8 +21,7 @@ public class DashboardController {
     private TransacoesRepository transacoesRepository;
 
     @GetMapping("/dashboard")
-    public String roteDashboard(Model model){
-
+    public String roteDashboard(Model model) {
         long totalClientes = clientesRepository.count();
         long totalContas = contasRepository.count();
         long totalTransacoes = transacoesRepository.count();
@@ -37,4 +36,8 @@ public class DashboardController {
         return "dashboard";
     }
 
+    @GetMapping("/")
+    public String raiz() {
+        return "redirect:/dashboard";
+    }
 }

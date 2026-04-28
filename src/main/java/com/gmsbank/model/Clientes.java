@@ -1,6 +1,7 @@
 package com.gmsbank.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -10,7 +11,7 @@ public class Clientes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PK_id_clientes;
+    private Long PK_id_clientes;
 
     @Column(name = "nome_clientes")
     private String nome_clientes;
@@ -18,6 +19,7 @@ public class Clientes {
     @Column(name = "cpf_clientes")
     private String cpf_clientes;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "data_nascimento_clientes")
     private Date data_nascimento_clientes;
 
@@ -40,7 +42,7 @@ public class Clientes {
 
     }
 
-    public Clientes(int PK_id_clientes, String nome_clientes, String cpf_clientes, Date data_nascimento_clientes, String telefone_clientes, String email_clientes, String endereco_clientes, Boolean ativo_clientes, Date criado_em_clientes) {
+    public Clientes(Long PK_id_clientes, String nome_clientes, String cpf_clientes, Date data_nascimento_clientes, String telefone_clientes, String email_clientes, String endereco_clientes, Boolean ativo_clientes, Date criado_em_clientes) {
         this.PK_id_clientes = PK_id_clientes;
         this.nome_clientes = nome_clientes;
         this.cpf_clientes = cpf_clientes;
@@ -52,11 +54,11 @@ public class Clientes {
         this.criado_em_clientes = criado_em_clientes;
     }
 
-    public int getPK_id_clientes() {
+    public Long getPK_id_clientes() {
         return PK_id_clientes;
     }
 
-    public void setPK_id_clientes(int PK_id_clientes) {
+    public void setPK_id_clientes(Long PK_id_clientes) {
         this.PK_id_clientes = PK_id_clientes;
     }
 

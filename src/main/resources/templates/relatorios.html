@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMS Bank — Relatórios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --gold: #C9A84C; --gold-dark: #8B6914; --black: #0A0A0F;
+            --surface: #12121A; --surface2: #1C1C28; --border: rgba(201,168,76,0.15);
+            --text: #F0EDE6; --text-muted: #6A6870; --green: #4CAF50; --red: #F44336; --blue: #2196F3;
+            --sidebar-w: 260px;
+        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--text); min-height: 100vh; display: flex; }
+
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; }
+        .sidebar-brand { padding: 32px 28px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .brand-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); }
+        .brand-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+        .brand-text span { color: var(--gold); }
+        .nav-section { padding: 24px 16px 8px; }
+        .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 0 12px; margin-bottom: 8px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: all 0.2s ease; margin-bottom: 2px; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+        .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+        .sidebar-footer { margin-top: auto; padding: 20px 16px; border-top: 1px solid var(--border); }
+        .user-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border); }
+        .user-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--black); flex-shrink: 0; }
+        .user-info { flex: 1; }
+        .user-name { font-size: 13px; font-weight: 500; }
+        .user-role { font-size: 11px; color: var(--gold); }
+        .logout-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; transition: color 0.2s; }
+        .logout-btn:hover { color: var(--red); }
+
+        /* MAIN */
+        .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+        .topbar { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--black); position: sticky; top: 0; z-index: 50; }
+        .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
+        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .content { padding: 40px; flex: 1; }
+
+        /* STATS GRID */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 36px; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+        .stat-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+        .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--gold); }
+        .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+        /* SECTION GRID */
+        .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+
+        /* TABLE CARD */
+        .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .table-card.full { grid-column: 1 / -1; }
+        .table-header { padding: 24px 28px; border-bottom: 1px solid var(--border); }
+        .table-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+        .table-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding: 14px 20px; border-bottom: 1px solid var(--border); }
+        td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid rgba(201,168,76,0.05); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(201,168,76,0.02); }
+
+        /* BADGES */
+        .tx-type { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .tx-deposito { background: rgba(76,175,80,0.12); color: var(--green); }
+        .tx-saque { background: rgba(244,67,54,0.12); color: var(--red); }
+        .tx-transferencia { background: rgba(33,150,243,0.12); color: var(--blue); }
+        .valor-positive { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--green); }
+        .valor-negative { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--red); }
+        .account-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-size: 12px; font-family: monospace; color: var(--gold); }
+        .rank-num { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--gold); font-size: 16px; }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon">G</div>
+        <div class="brand-text">GMS <span>BANK</span></div>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <a href="/dashboard" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="/clientes" class="nav-item"><span class="nav-icon">👤</span> Clientes</a>
+        <a href="/contas" class="nav-item"><span class="nav-icon">🏦</span> Contas</a>
+        <a href="/transacoes" class="nav-item"><span class="nav-icon">💸</span> Transações</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Gestão</div>
+        <a href="/usuarios" class="nav-item"><span class="nav-icon">👥</span> Usuários</a>
+        <a href="/relatorios" class="nav-item active"><span class="nav-icon">📈</span> Relatórios</a>
+    </div>
+    <div class="sidebar-footer">
+        <div class="user-card">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+                <div class="user-name">Administrador</div>
+                <div class="user-role">Admin</div>
+            </div>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button class="logout-btn" type="submit">⏻</button>
+            </form>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <div>
+            <div class="page-title">Relatórios</div>
+            <div class="page-subtitle">Visão consolidada das operações do banco</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- CARDS DE RESUMO -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Clientes</div>
+                <div class="stat-value" th:text="${totalClientes}">0</div>
+                <div class="stat-sub">clientes cadastrados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Contas</div>
+                <div class="stat-value" th:text="${totalContas}">0</div>
+                <div class="stat-sub">contas ativas e inativas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Transações</div>
+                <div class="stat-value" th:text="${totalTransacoes}">0</div>
+                <div class="stat-sub">movimentações realizadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Volume Movimentado</div>
+                <div class="stat-value" th:text="'R$ ' + ${#numbers.formatDecimal(volumeTotal, 1, 2)}">R$ 0,00</div>
+                <div class="stat-sub">soma de todas as transações</div>
+            </div>
+        </div>
+
+        <!-- TRANSAÇÕES RECENTES + CLIENTES COM MAIS CONTAS -->
+        <div class="section-grid">
+
+            <!-- Últimas Transações -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title">Últimas Transações</div>
+                    <div class="table-subtitle">As 10 movimentações mais recentes</div>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Conta</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tx : ${ultimasTransacoes}">
+                        <td>
+                            <span class="tx-type tx-deposito" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}">⬆ Depósito</span>
+                            <span class="tx-type tx-saque" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Saque'}">⬇ Saque</span>
+                            <span class="tx-type tx-transferencia" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Transferência'}">↔ Transferência</span>
+                        </td>
+                        <td><span class="account-chip" th:text="${tx.FK_id_conta_origem.numero_contas}">—</span></td>
+                        <td>
+                            <span class="valor-positive" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'+ R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                            <span class="valor-negative" th:unless="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'- R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                        </td>
+                        <td th:text="${#dates.format(tx.realizado_em_transacoes, 'dd/MM/yy HH:mm')}">—</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(ultimasTransacoes)}">
+                        <td colspan="4"><div class="empty-state">Nenhuma transação ainda.</div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Contas com maior saldo -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title">Maiores Saldos</div>
+                    <div class="table-subtitle">Top 10 contas por saldo atual</div>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Conta</th>
+                        <th>Cliente</th>
+                        <th>Saldo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="conta, iterStat : ${contasMaiorSaldo}">
+                        <td><span class="rank-num" th:text="${iterStat.count}">1</span></td>
+                        <td><span class="account-chip" th:text="${conta.numero_contas}">—</span></td>
+                        <td th:text="${conta.FK_id_clientes.nome_clientes}">—</td>
+                        <td class="valor-positive" th:text="'R$ ' + ${#numbers.formatDecimal(conta.saldo_contas, 1, 2)}">—</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(contasMaiorSaldo)}">
+                        <td colspan="4"><div class="empty-state">Nenhuma conta cadastrada.</div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TODAS AS TRANSAÇÕES -->
+        <div class="table-card full">
+            <div class="table-header">
+                <div class="table-title">Histórico Completo de Transações</div>
+                <div class="table-subtitle" th:text="${totalTransacoes} + ' registros encontrados'">0 registros</div>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Conta Origem</th>
+                    <th>Conta Destino</th>
+                    <th>Valor</th>
+                    <th>Saldo Após</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tx : ${todasTransacoes}">
+                    <td th:text="'#' + ${tx.PK_id_transacoes}">#1</td>
+                    <td>
+                        <span class="tx-type tx-deposito" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}">⬆ Depósito</span>
+                        <span class="tx-type tx-saque" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Saque'}">⬇ Saque</span>
+                        <span class="tx-type tx-transferencia" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Transferência'}">↔ Transferência</span>
+                    </td>
+                    <td><span class="account-chip" th:text="${tx.FK_id_conta_origem.numero_contas}">—</span></td>
+                    <td>
+                        <span class="account-chip" th:if="${tx.FK_id_conta_destino != null}" th:text="${tx.FK_id_conta_destino.numero_contas}">—</span>
+                        <span th:unless="${tx.FK_id_conta_destino != null}" style="color: var(--text-muted)">—</span>
+                    </td>
+                    <td>
+                        <span class="valor-positive" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'+ R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                        <span class="valor-negative" th:unless="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'- R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                    </td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(tx.saldo_apos_transacoes, 1, 2)}">R$ 0,00</td>
+                    <td th:text="${tx.descricao_transacoes != null ? tx.descricao_transacoes : '—'}">—</td>
+                    <td th:text="${#dates.format(tx.realizado_em_transacoes, 'dd/MM/yyyy HH:mm')}">—</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(todasTransacoes)}">
+                    <td colspan="8"><div class="empty-state">Nenhuma transação registrada.</div></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

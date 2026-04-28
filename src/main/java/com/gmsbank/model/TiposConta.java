@@ -9,7 +9,7 @@ public class TiposConta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk_id_tipos_conta")
-    private int PK_id_tipos_conta;
+    private Long PK_id_tipos_conta;
 
     @Column(name = "nome_tipos_conta")
     private String nome_tipos_conta;
@@ -24,18 +24,18 @@ public class TiposConta {
 
     }
 
-    public TiposConta(int PK_id_tipos_contas, String nome_tipos_conta, String descricao_tipos_conta, double rendimento_anual_tipos_conta) {
+    public TiposConta(Long PK_id_tipos_contas, String nome_tipos_conta, String descricao_tipos_conta, double rendimento_anual_tipos_conta) {
         this.PK_id_tipos_conta = PK_id_tipos_conta;
         this.nome_tipos_conta = nome_tipos_conta;
         this.descricao_tipos_conta = descricao_tipos_conta;
         this.rendimento_anual_tipos_conta = rendimento_anual_tipos_conta;
     }
 
-    public int getPK_id_tipos_conta() {
+    public Long getPK_id_tipos_conta() {
         return PK_id_tipos_conta;
     }
 
-    public void setPK_id_tipos_conta(int PK_id_tipos_conta) {
+    public void setPK_id_tipos_conta(Long PK_id_tipos_conta) {
         this.PK_id_tipos_conta = PK_id_tipos_conta;
     }
 

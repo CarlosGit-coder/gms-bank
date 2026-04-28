@@ -8,16 +8,127 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --gold: #C9A84C; --gold-dark: #8B6914;
-            --black: #0A0A0F; --surface: #12121A; --surface2: #1C1C28;
-            --border: rgba(201,168,76,0.15); --text: #F0EDE6; --text-muted: #6A6870;
-            --red: #F44336; --sidebar-w: 260px;
+            --gold: #C9A84C; --gold-dark: #8B6914; --black: #0A0A0F;
+            --surface: #12121A; --surface2: #1C1C28; --border: rgba(201,168,76,0.15);
+            --text: #F0EDE6; --text-muted: #6A6870; --red: #F44336; --sidebar-w: 260px;
         }
         body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--text); min-height: 100vh; display: flex; }
         .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; }
         .sidebar-brand { padding: 32px 28px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-        .brand-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); flex-shrink: 0; }
+        .brand-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); }
         .brand-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
         .brand-text span { color: var(--gold); }
         .nav-section { padding: 24px 16px 8px; }
-        .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mu
+        .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 0 12px; margin-bottom: 8px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: all 0.2s ease; margin-bottom: 2px; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+        .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+        .sidebar-footer { margin-top: auto; padding: 20px 16px; border-top: 1px solid var(--border); }
+        .user-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border); }
+        .user-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--black); }
+        .user-info { flex: 1; }
+        .user-name { font-size: 13px; font-weight: 500; }
+        .user-role { font-size: 11px; color: var(--gold); }
+        .logout-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; }
+        .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+        .topbar { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--black); }
+        .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
+        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .content { padding: 40px; flex: 1; display: flex; justify-content: center; }
+        .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; width: 100%; max-width: 700px; height: fit-content; }
+        .form-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .form-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 32px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+        .form-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: all 0.2s; }
+        .form-input:focus { border-color: var(--gold); }
+        .form-input::placeholder { color: var(--text-muted); }
+        .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px; }
+        .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border: none; border-radius: 10px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--black); cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+        .btn-cancel { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 28px; font-size: 14px; color: var(--text-muted); cursor: pointer; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; }
+        .btn-cancel:hover { color: var(--text); }
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon">G</div>
+        <div class="brand-text">GMS <span>BANK</span></div>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <a href="/dashboard" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="/clientes" class="nav-item active"><span class="nav-icon">👤</span> Clientes</a>
+        <a href="/contas" class="nav-item"><span class="nav-icon">🏦</span> Contas</a>
+        <a href="/transacoes" class="nav-item"><span class="nav-icon">💸</span> Transações</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-label">Gestão</div>
+        <a href="/usuarios" class="nav-item"><span class="nav-icon">👥</span> Usuários</a>
+    </div>
+    <div class="sidebar-footer">
+        <div class="user-card">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+                <div class="user-name">Administrador</div>
+                <div class="user-role">Admin</div>
+            </div>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button class="logout-btn" type="submit">⏻</button>
+            </form>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <div>
+            <div class="page-title">Editar Cliente</div>
+            <div class="page-subtitle">Atualize os dados do cliente</div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="form-card">
+            <div class="form-title">Dados do Cliente</div>
+            <div class="form-subtitle">Altere os campos desejados e salve</div>
+            <form th:action="@{/clientes/editar/{id}(id=${clientes.PK_id_clientes})}" method="post" th:object="${clientes}">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" name="nome_clientes" class="form-input" th:value="${clientes.nome_clientes}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CPF</label>
+                        <input type="text" name="cpf_clientes" class="form-input" th:value="${clientes.cpf_clientes}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data de Nascimento</label>
+                        <input type="date" name="data_nascimento_clientes" class="form-input" th:value="${#dates.format(clientes.data_nascimento_clientes, 'yyyy-MM-dd')}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" name="telefone_clientes" class="form-input" th:value="${clientes.telefone_clientes}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" name="email_clientes" class="form-input" th:value="${clientes.email_clientes}">
+                    </div>
+                    <div class="form-group full">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" name="endereco_clientes" class="form-input" th:value="${clientes.endereco_clientes}">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a href="/clientes" class="btn-cancel">Cancelar</a>
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
