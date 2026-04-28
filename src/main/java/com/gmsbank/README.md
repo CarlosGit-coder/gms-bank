@@ -258,4 +258,13 @@ spring.jpa.hibernate.ddl-auto=update
 mvn spring-boot:run
 ```
 
-Acesse no navegador: `http://localhost:8080`
+
+
+---
+
+## 🎬 Vídeo Demonstrativo
+
+📺 **Assista ao vídeo demonstrativo:**
+👉 [Clique aqui para assistir](https://drive.google.com/file/d/1Ej2TdXDungz4C4JLztcs6xq0xc5jbR5N/view?usp=sharing)
+
+---
