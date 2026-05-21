@@ -10,7 +10,7 @@ public class Perfis {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PK_id_perfis;
+    private Long PK_id_perfis;
 
     @Column(name = "nome_perfis")
     private String nome_perfis;
@@ -25,18 +25,18 @@ public class Perfis {
 
     }
 
-    public Perfis(int PK_id_perfis, String nome_perfis, String descricao_perfis, Date data_criacao_perfis) {
+    public Perfis(long PK_id_perfis, String nome_perfis, String descricao_perfis, Date data_criacao_perfis) {
         this.PK_id_perfis = PK_id_perfis;
         this.nome_perfis = nome_perfis;
         this.descricao_perfis = descricao_perfis;
         this.data_criacao_perfis = data_criacao_perfis;
     }
 
-    public int getPK_id_perfis() {
+    public Long getPK_id_perfis() {
         return PK_id_perfis;
     }
 
-    public void setPK_id_perfis(int PK_id_perfis) {
+    public void setPK_id_perfis(Long PK_id_perfis) {
         this.PK_id_perfis = PK_id_perfis;
     }
 

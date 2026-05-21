@@ -64,10 +64,12 @@ public class ContaController {
     public String deletar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
         try {
-            contasRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("sucesso", "Conta excluída com sucesso!");
+            Contas contas = contasRepository.findById(id).orElseThrow();
+            contas.setAtiva_conta(false);
+            contasRepository.save(contas);
+            redirectAttributes.addFlashAttribute("sucesso", "Conta inativada com sucesso!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro", "Erro ao excluir conta. Verifique se ela possui transações vinculadas.");
+            redirectAttributes.addFlashAttribute("erro", "Erro ao inativar conta.");
         }
         return "redirect:/contas";
     }

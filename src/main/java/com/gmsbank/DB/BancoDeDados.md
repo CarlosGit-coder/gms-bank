@@ -364,5 +364,3 @@ List<Object[]>
 ```
 
 ---
-
-### 🧩 Estrutura do resultado

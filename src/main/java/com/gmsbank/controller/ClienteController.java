@@ -45,11 +45,11 @@ public class ClienteController {
     }
 
     @PostMapping("/clientes/editar/{id}")
-    public String salvarEdicao(@PathVariable Long id,
-                               @ModelAttribute Clientes clientes,
-                               RedirectAttributes redirectAttributes) {
+    public String salvarEdicao(@PathVariable Long id,  @ModelAttribute Clientes clientes, RedirectAttributes redirectAttributes) {
         try {
-            clientes.setPK_id_clientes(id);
+            Clientes clienteAtual = clientesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID não localizado"));
+                    clientes.setPK_id_clientes(id);
+            clientes.setAtivo_clientes(clienteAtual.getAtivo_clientes());
             clientesRepository.save(clientes);
             redirectAttributes.addFlashAttribute("sucesso", "Cliente atualizado com sucesso!");
         } catch (Exception e) {
@@ -59,13 +59,14 @@ public class ClienteController {
     }
 
     @PostMapping("/clientes/deletar/{id}")
-    public String deletarCliente(@PathVariable Long id,
-                                 RedirectAttributes redirectAttributes) {
+    public String deletarCliente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            clientesRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("sucesso", "Cliente excluído com sucesso!");
+            Clientes cliente = clientesRepository.findById(id).orElseThrow();
+            cliente.setAtivo_clientes(false);
+            clientesRepository.save(cliente);
+            redirectAttributes.addFlashAttribute("sucesso", "Cliente inativado com sucesso!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro", "Erro ao excluir cliente. Verifique se ele possui contas vinculadas.");
+            redirectAttributes.addFlashAttribute("erro", "Erro ao inativar cliente.");
         }
         return "redirect:/clientes";
     }
