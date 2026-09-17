@@ -1,0 +1,3 @@
+INSERT INTO perfis (nome_perfis, descricao_perfis) VALUES ('ADMIN','Acesso total ao sistema');
+INSERT INTO perfis (nome_perfis, descricao_perfis) VALUES ('GERENTE','Acesso gerencial ao sistema');
+INSERT INTO perfis (nome_perfis, descricao_perfis) VALUES ('CAIXA','Acesso operacional basico ao sistema');
