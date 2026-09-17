@@ -123,6 +123,10 @@ gms-bank/
 │           │   ├── transacoes.html
 │           │   └── usuarios.html
 │           └── application.properties
+├── Dockerfile
+├── docker-compose.yaml
+├── .env.example
+└── .gitignore
 ```
 
 ---
@@ -216,7 +220,8 @@ Visão consolidada das operações do banco.
 ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=spring-security&logoColor=white)
 ![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -227,12 +232,11 @@ Visão consolidada das operações do banco.
 
 ## 🚀 Como Executar
 
+O projeto está totalmente containerizado com **Docker**. Não é necessário instalar Java, Maven ou PostgreSQL na máquina — só o Docker.
+
 ### Pré-requisitos
 
-- Java JDK 17 ou superior
-- Maven 3.8+
-- MySQL 8.0+
-- IntelliJ IDEA (recomendado)
+- [Docker](https://www.docker.com/) e Docker Compose instalados
 
 ### Passos
 
@@ -244,21 +248,49 @@ git clone https://github.com/seu-usuario/gms-bank.git
 cd gms-bank
 ```
 
-Configure o banco de dados em `src/main/resources/application.properties`:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/gmsbank
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
-```
+Copie o arquivo de variáveis de ambiente de exemplo e edite com suas próprias credenciais locais:
 
 ```bash
-# Compile e execute com Maven
-mvn spring-boot:run
+cp .env.example .env
 ```
 
+O `.env.example` já vem com a estrutura esperada:
 
+```
+POSTGRES_DB=fincore_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=defina_uma_senha_aqui
+```
+
+> ⚠️ **Aviso:** o arquivo `.env` contém a senha do banco e **não é versionado** (está no `.gitignore`). Cada pessoa que clonar o projeto deve criar o seu próprio `.env` local a partir do `.env.example` — nunca commitar o `.env` real.
+
+Suba os containers (aplicação + banco de dados):
+
+```bash
+docker compose up --build
+```
+
+Isso vai:
+1. Compilar o projeto com Maven dentro do container
+2. Subir o PostgreSQL e aguardar ele ficar saudável (healthcheck)
+3. Iniciar a aplicação Spring Boot conectada ao banco
+
+### Portas
+
+| Serviço | Porta interna | Porta exposta na máquina |
+|---|---|---|
+| Aplicação (Spring Boot) | `8081` | `8081` |
+| PostgreSQL | `5432` | `5433` |
+
+Acesse a aplicação em: **http://localhost:8081**
+
+> Se a porta `8081` ou `5433` já estiver em uso na sua máquina, edite o `docker-compose.yaml` trocando apenas o primeiro número de cada mapeamento (ex: `"5433:5432"` → `"5434:5432"`), sem alterar a porta interna do container.
+
+Para derrubar os containers (mantendo os dados salvos no volume):
+
+```bash
+docker compose down
+```
 
 ---
 
