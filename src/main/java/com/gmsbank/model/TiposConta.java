@@ -2,6 +2,8 @@ package com.gmsbank.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "tipos_conta")
 public class TiposConta {
@@ -18,13 +20,13 @@ public class TiposConta {
     private String descricao_tipos_conta;
 
     @Column(name = "rendimento_anual_tipos_conta")
-    private double rendimento_anual_tipos_conta;
+    private BigDecimal rendimento_anual_tipos_conta;
 
     public TiposConta() {
 
     }
 
-    public TiposConta(Long PK_id_tipos_contas, String nome_tipos_conta, String descricao_tipos_conta, double rendimento_anual_tipos_conta) {
+    public TiposConta(Long PK_id_tipos_contas, String nome_tipos_conta, String descricao_tipos_conta, BigDecimal rendimento_anual_tipos_conta) {
         this.PK_id_tipos_conta = PK_id_tipos_conta;
         this.nome_tipos_conta = nome_tipos_conta;
         this.descricao_tipos_conta = descricao_tipos_conta;
@@ -55,11 +57,11 @@ public class TiposConta {
         this.descricao_tipos_conta = descricao_tipos_conta;
     }
 
-    public double getRendimento_anual_tipos_conta() {
+    public BigDecimal getRendimento_anual_tipos_conta() {
         return rendimento_anual_tipos_conta;
     }
 
-    public void setRendimento_anual_tipos_conta(double rendimento_anual_tipos_conta) {
+    public void setRendimento_anual_tipos_conta(BigDecimal rendimento_anual_tipos_conta) {
         this.rendimento_anual_tipos_conta = rendimento_anual_tipos_conta;
     }
 }

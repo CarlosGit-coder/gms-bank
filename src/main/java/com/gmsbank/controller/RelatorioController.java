@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,13 +41,13 @@ public class RelatorioController {
                 .toList();
 
         List<Contas> contasMaiorSaldo = todasContas.stream()
-                .sorted(Comparator.comparingDouble(Contas::getSaldo_contas).reversed())
+                .sorted(Comparator.comparing(Contas::getSaldo_contas, Comparator.nullsLast(Comparator.reverseOrder())))
                 .limit(10)
                 .toList();
 
-        double volumeTotal = todasTransacoes.stream()
-                .mapToDouble(Transacoes::getValor_transacoes)
-                .sum();
+        BigDecimal volumeTotal = todasTransacoes.stream()
+                .map(Transacoes::getValor_transacoes)
+                .filter(valor -> valor != null).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         model.addAttribute("totalClientes", clientesRepository.count());
         model.addAttribute("totalContas", contasRepository.count());

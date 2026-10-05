@@ -1,6 +1,6 @@
 -- ============================================================
 -- GMS BANK SYSTEM
--- DML - INSERTS E ATUALIZAÇÕES
+-- V2 - INSERTS DE DADOS
 -- PostgreSQL
 -- ============================================================
 
@@ -9,14 +9,32 @@
 -- Insert Tab1_Perfis
 -- ============================================================
 
-INSERT INTO perfis (nome_perfis, descricao_perfis)
-VALUES ('ADMIN', 'Acesso total ao sistema');
+INSERT INTO perfis (
+    nome_perfis,
+    descricao_perfis
+)
+VALUES (
+           'ADMIN',
+           'Acesso total ao sistema'
+       );
 
-INSERT INTO perfis (nome_perfis, descricao_perfis)
-VALUES ('GERENTE', 'Acesso gerencial ao sistema');
+INSERT INTO perfis (
+    nome_perfis,
+    descricao_perfis
+)
+VALUES (
+           'GERENTE',
+           'Acesso gerencial ao sistema'
+       );
 
-INSERT INTO perfis (nome_perfis, descricao_perfis)
-VALUES ('CAIXA', 'Acesso operacional basico ao sistema');
+INSERT INTO perfis (
+    nome_perfis,
+    descricao_perfis
+)
+VALUES (
+           'CAIXA',
+           'Acesso operacional basico ao sistema'
+       );
 
 
 -- ============================================================
@@ -31,12 +49,12 @@ INSERT INTO usuarios (
     FK_perfil_id
 )
 VALUES (
-    'Marcos Ribeiro',
-    'marcosribeiro1899@gmail.com',
-    '025.556.565-45',
-    'senha123',
-    1
-);
+           'Marcos Ribeiro',
+           'marcosribeiro1899@gmail.com',
+           '025.556.565-45',
+           'senha123',
+           1
+       );
 
 INSERT INTO usuarios (
     nome_usuarios,
@@ -46,23 +64,19 @@ INSERT INTO usuarios (
     FK_perfil_id
 )
 VALUES (
-    'Arlyon José',
-    'arlyonjose1999@gmail.com',
-    '156.597.459-12',
-    'senha123',
-    2
-);
-
-UPDATE usuarios
-SET senha_hash = 'e7d80ffeefa212b7c5c55700e4f7193e'
-WHERE email_usuarios = 'marcosribeiro1899@gmail.com';
+           'Arlyon José',
+           'arlyonjose1999@gmail.com',
+           '156.597.459-12',
+           'senha123',
+           2
+       );
 
 
 -- ============================================================
--- Insert Tab3_Auditoria_Login
+-- Tab3_Auditoria_Login
 -- ============================================================
 
--- Não há INSERT de dados de auditoria no README.
+-- Não há INSERT de auditoria no README.
 
 
 -- ============================================================
@@ -78,13 +92,13 @@ INSERT INTO clientes (
     endereco_clientes
 )
 VALUES (
-    'Carlos Gabriel',
-    '044.034.743-22',
-    '2006-07-20',
-    '(86) 98816-6764',
-    'carlosgabrielmonteiro2006@gmail.com',
-    'Mocambinho'
-);
+           'Carlos Gabriel',
+           '044.034.743-22',
+           '2006-07-20',
+           '(86) 98816-6764',
+           'carlosgabrielmonteiro2006@gmail.com',
+           'Mocambinho'
+       );
 
 
 -- ============================================================
@@ -97,10 +111,10 @@ INSERT INTO tipos_conta (
     rendimento_anual_tipos_conta
 )
 VALUES (
-    'Conta Corrente',
-    'Uso diário',
-    0.00
-);
+           'Conta Corrente',
+           'Uso diário',
+           0.00
+       );
 
 
 -- ============================================================
@@ -115,19 +129,35 @@ INSERT INTO contas (
     FK_id_clientes
 )
 VALUES (
-    '0001-1',
-    1000000.00,
-    99999999.00,
-    1,
-    1
-);
+           '0001-1',
+           1000000.00,
+           99999999.00,
+           1,
+           1
+       );
 
 
 -- ============================================================
 -- Insert Tab7_Tipos_Transacao
 -- ============================================================
 
--- Não há INSERT de tipos de transação no README.
+INSERT INTO tipos_transacao (
+    nome_tipos_transacao,
+    descricao_tipos_transacao
+)
+VALUES (
+           'Transferencia',
+           'Transferencia de valores entre contas'
+       );
+
+INSERT INTO tipos_transacao (
+    nome_tipos_transacao,
+    descricao_tipos_transacao
+)
+VALUES (
+           'Deposito',
+           'Deposito de valores na conta'
+       );
 
 
 -- ============================================================
@@ -142,13 +172,9 @@ INSERT INTO transacoes (
     FK_id_tipos_transacao
 )
 VALUES (
-    20.00,
-    'Deposito mensal',
-    1000020.00,
-    1,
-    2
-);
-
-UPDATE transacoes
-SET saldo_apos_transacoes = 1000020.00
-WHERE PK_id_transacoes = 1;
+           20.00,
+           'Deposito mensal',
+           1000020.00,
+           1,
+           2
+       );

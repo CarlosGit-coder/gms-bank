@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+
 @Controller
 @RequestMapping("/contas")
 public class ContaController {
@@ -35,7 +37,7 @@ public class ContaController {
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@RequestParam String numero_contas, @RequestParam Long clienteId,  @RequestParam Long tipoContaId,  @RequestParam(defaultValue = "0") Double saldo_contas,  @RequestParam(defaultValue = "0") Double limite_contas, RedirectAttributes redirectAttributes) {
+    public String cadastrar(@RequestParam String numero_contas, @RequestParam Long clienteId, @RequestParam Long tipoContaId, @RequestParam(defaultValue = "0") BigDecimal saldo_contas, @RequestParam(defaultValue = "0") BigDecimal limite_contas, RedirectAttributes redirectAttributes) {
 
         try {
             Clientes clientes = clientesRepository.findById(clienteId)

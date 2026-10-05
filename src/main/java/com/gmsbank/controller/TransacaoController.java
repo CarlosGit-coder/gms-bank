@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,11 +39,11 @@ public class TransacaoController {
     public String nova(@RequestParam String tipo,
                        @RequestParam Long contaOrigemId,
                        @RequestParam(required = false) Long contaDestinoId,
-                       @RequestParam double valor,
+                       @RequestParam BigDecimal valor,
                        @RequestParam(required = false) String descricao,
                        RedirectAttributes redirectAttributes) {
         try {
-            if (valor <= 0) {
+            if (valor.compareTo(BigDecimal.ZERO) <= 0) {
                 throw new IllegalArgumentException("O valor da transação deve ser positivo.");
             }
 
@@ -88,21 +89,21 @@ public class TransacaoController {
         return "redirect:/transacoes";
     }
 
-    private void processarDeposito(Transacoes transacao, Contas conta, double valor) {
-        conta.setSaldo_contas(conta.getSaldo_contas() + valor);
+    private void processarDeposito(Transacoes transacao, Contas conta, BigDecimal valor) {
+        conta.setSaldo_contas(conta.getSaldo_contas().add(valor));
         contasRepository.save(conta);
 
         transacao.setSaldo_apos_transacoes(conta.getSaldo_contas());
         transacoesRepository.save(transacao);
     }
 
-    private void processarSaque(Transacoes transacao, Contas conta, double valor) {
-        double disponivel = conta.getSaldo_contas() + conta.getLimite_contas();
-        if (disponivel < valor) {
+    private void processarSaque(Transacoes transacao, Contas conta, BigDecimal valor) {
+        BigDecimal disponivel = conta.getSaldo_contas().add(conta.getLimite_contas());
+        if (disponivel.compareTo(valor) < 0) {
             throw new IllegalStateException(
                     String.format("Saldo insuficiente. Disponível: R$ %.2f", disponivel));
         }
-        conta.setSaldo_contas(conta.getSaldo_contas() - valor);
+        conta.setSaldo_contas(conta.getSaldo_contas().subtract(valor));
         contasRepository.save(conta);
 
         transacao.setSaldo_apos_transacoes(conta.getSaldo_contas());
@@ -110,17 +111,17 @@ public class TransacaoController {
     }
 
 
-        private void processarTransferencia(Transacoes transacao, Contas origem, Contas destino, double valor) {
-        double disponivel = origem.getSaldo_contas() + origem.getLimite_contas();
-        if (disponivel < valor) {
+        private void processarTransferencia(Transacoes transacao, Contas origem, Contas destino, BigDecimal valor) {
+        BigDecimal disponivel = origem.getSaldo_contas().add(origem.getLimite_contas());
+        if (disponivel.compareTo(valor) < 0 ) {
             throw new IllegalStateException(
                     String.format("Saldo insuficiente na origem. Disponível: R$ %.2f", disponivel));
         }
 
-        origem.setSaldo_contas(origem.getSaldo_contas() - valor);
+        origem.setSaldo_contas(origem.getSaldo_contas().subtract(valor));
         contasRepository.save(origem);
 
-        destino.setSaldo_contas(destino.getSaldo_contas() + valor);
+        destino.setSaldo_contas(destino.getSaldo_contas().add(valor));
         contasRepository.save(destino);
 
         transacao.setFK_id_conta_destino(destino);

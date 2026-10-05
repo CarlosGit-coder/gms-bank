@@ -3,6 +3,7 @@ package com.gmsbank.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "contas")
@@ -16,10 +17,10 @@ public class Contas {
     private String numero_contas;
 
     @Column(name = "saldo_contas")
-    private double saldo_contas;
+    private BigDecimal saldo_contas;
 
     @Column(name = "limite_contas")
-    private double limite_contas;
+    private BigDecimal limite_contas;
 
     @Column(name = "ativa_conta")
     private Boolean ativa_conta;
@@ -39,7 +40,8 @@ public class Contas {
 
     }
 
-    public Contas(Long PK_id_contas, String numero_contas, double saldo_contas, double limite_contas, Boolean ativa_conta, Date criado_em_contas, TiposConta FK_tipos_contas, Clientes FK_id_clientes) {
+    public Contas(Long PK_id_contas, String numero_contas, BigDecimal saldo_contas, BigDecimal limite_contas, Boolean ativa_conta, Date criado_em_contas, TiposConta FK_tipos_contas,
+                  Clientes FK_id_clientes) {
         this.PK_id_contas = PK_id_contas;
         this.numero_contas = numero_contas;
         this.limite_contas = limite_contas;
@@ -65,19 +67,19 @@ public class Contas {
         this.numero_contas = numero_contas;
     }
 
-    public double getSaldo_contas() {
+    public BigDecimal getSaldo_contas() {
         return saldo_contas;
     }
 
-    public void setSaldo_contas(double saldo_contas) {
+    public void setSaldo_contas(BigDecimal saldo_contas) {
         this.saldo_contas = saldo_contas;
     }
 
-    public double getLimite_contas() {
+    public BigDecimal getLimite_contas() {
         return limite_contas;
     }
 
-    public void setLimite_contas(double limite_contas) {
+    public void setLimite_contas(BigDecimal limite_contas) {
         this.limite_contas = limite_contas;
     }
 
