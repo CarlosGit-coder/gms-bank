@@ -51,11 +51,12 @@ public class RelatorioController {
 
         model.addAttribute("totalClientes", clientesRepository.count());
         model.addAttribute("totalContas", contasRepository.count());
-        model.addAttribute("totalTransacoes", todasTransacoes.size());
-        model.addAttribute("volumeTotal", volumeTotal);
-        model.addAttribute("ultimasTransacoes", ultimasTransacoes);
-        model.addAttribute("contasMaiorSaldo", contasMaiorSaldo);
-        model.addAttribute("todasTransacoes", todasTransacoes);
+        model.addAttribute("totalTransacoes", transacoesRepository.count());
+        model.addAttribute("volumeTotal", transacoesRepository.buscarVolumeTotalTransacoes());
+        model.addAttribute("ultimasTransacoes", transacoesRepository.buscarRelatorioTransacoes());
+        model.addAttribute("contasMaiorSaldo", contasRepository.buscarMaioresSaldos());
+        model.addAttribute("todasTransacoes", transacoesRepository.buscarRelatorioTransacoes());
+
 
         return "relatorios";
     }

@@ -28,10 +28,11 @@ public class DashboardController {
 
         var ultimasTransacoes = transacoesRepository.findAll();
 
-        model.addAttribute("totalClientes", totalClientes);
-        model.addAttribute("totalContas", totalContas);
-        model.addAttribute("totalTransacoes", totalTransacoes);
-        model.addAttribute("transacoes", ultimasTransacoes);
+        model.addAttribute("totalClientes", clientesRepository.count());
+        model.addAttribute("totalContas", contasRepository.count());
+        model.addAttribute("totalTransacoes", transacoesRepository.count());
+        model.addAttribute("transacoes", transacoesRepository.buscarUltimasTransacoes());
+
 
         return "dashboard";
     }

@@ -159,6 +159,15 @@ VALUES (
            'Deposito de valores na conta'
        );
 
+INSERT INTO tipos_transacao (
+    nome_tipos_transacao,
+    descricao_tipos_transacao
+)
+VALUES (
+       'Saque',
+    'Retirada de valores na conta'
+      );
+
 
 -- ============================================================
 -- Insert Tab8_Transacoes

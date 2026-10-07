@@ -543,3 +543,397 @@ SELECT 900.00, 'Deposito de teste', c.saldo_contas, '2026-09-17 11:42:00', c.PK_
 
 INSERT INTO transacoes (valor_transacoes,descricao_transacoes,saldo_apos_transacoes,realizado_em_transacoes,FK_id_conta_origem,FK_id_conta_destino,FK_id_tipos_transacao)
 SELECT 1025.00, 'Deposito de teste', c.saldo_contas, '2026-09-18 12:53:00', c.PK_id_contas, c.PK_id_contas, t.PK_id_tipos_transacao FROM contas c CROSS JOIN tipos_transacao t WHERE c.numero_contas='0006-1' AND t.nome_tipos_transacao='Deposito';
+
+INSERT INTO transacoes (valor_transacoes,descricao_transacoes,saldo_apos_transacoes,realizado_em_transacoes,FK_id_conta_origem,FK_id_conta_destino,FK_id_tipos_transacao)
+SELECT 200.00,'Saque de teste',c.saldo_contas - 200.00,'2026-10-01 09:15:00',c.PK_id_contas,NULL,t.PK_id_tipos_transacao FROM contas c CROSS JOIN tipos_transacao t WHERE c.numero_contas = '0002-1' AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    350.00,
+    'Saque de teste',
+    c.saldo_contas - 350.00,
+    '2026-10-01 10:30:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0003-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    500.00,
+    'Saque de teste',
+    c.saldo_contas - 500.00,
+    '2026-10-01 11:45:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0005-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    750.00,
+    'Saque de teste',
+    c.saldo_contas - 750.00,
+    '2026-10-01 13:20:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0010-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    1000.00,
+    'Saque de teste',
+    c.saldo_contas - 1000.00,
+    '2026-10-01 14:10:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0012-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    450.00,
+    'Saque de teste',
+    c.saldo_contas - 450.00,
+    '2026-10-01 15:00:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0015-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    800.00,
+    'Saque de teste',
+    c.saldo_contas - 800.00,
+    '2026-10-02 09:25:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0017-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    250.00,
+    'Saque de teste',
+    c.saldo_contas - 250.00,
+    '2026-10-02 10:40:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0020-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    1200.00,
+    'Saque de teste',
+    c.saldo_contas - 1200.00,
+    '2026-10-02 11:55:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0021-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    600.00,
+    'Saque de teste',
+    c.saldo_contas - 600.00,
+    '2026-10-02 13:30:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0023-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    900.00,
+    'Saque de teste',
+    c.saldo_contas - 900.00,
+    '2026-10-02 14:45:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0025-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    300.00,
+    'Saque de teste',
+    c.saldo_contas - 300.00,
+    '2026-10-02 15:30:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0028-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    700.00,
+    'Saque de teste',
+    c.saldo_contas - 700.00,
+    '2026-10-03 09:10:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0030-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    1500.00,
+    'Saque de teste',
+    c.saldo_contas - 1500.00,
+    '2026-10-03 10:25:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0032-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    400.00,
+    'Saque de teste',
+    c.saldo_contas - 400.00,
+    '2026-10-03 11:40:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0034-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    1100.00,
+    'Saque de teste',
+    c.saldo_contas - 1100.00,
+    '2026-10-03 13:05:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0036-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    550.00,
+    'Saque de teste',
+    c.saldo_contas - 550.00,
+    '2026-10-03 14:20:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0038-1'
+  AND t.nome_tipos_transacao = 'Saque';
+
+
+INSERT INTO transacoes (
+    valor_transacoes,
+    descricao_transacoes,
+    saldo_apos_transacoes,
+    realizado_em_transacoes,
+    FK_id_conta_origem,
+    FK_id_conta_destino,
+    FK_id_tipos_transacao
+)
+SELECT
+    1300.00,
+    'Saque de teste',
+    c.saldo_contas - 1300.00,
+    '2026-10-03 15:35:00',
+    c.PK_id_contas,
+    NULL,
+    t.PK_id_tipos_transacao
+FROM contas c
+         CROSS JOIN tipos_transacao t
+WHERE c.numero_contas = '0040-1'
+  AND t.nome_tipos_transacao = 'Saque';
