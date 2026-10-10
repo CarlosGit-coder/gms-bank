@@ -1,13 +1,26 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    ```
     <title>GMS Bank — Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+          rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --gold: #C9A84C;
@@ -17,7 +30,7 @@
             --surface: #12121A;
             --surface2: #1C1C28;
             --surface3: #242433;
-            --border: rgba(201,168,76,0.15);
+            --border: rgba(201, 168, 76, 0.15);
             --text: #F0EDE6;
             --text-muted: #6A6870;
             --green: #4CAF50;
@@ -35,6 +48,7 @@
         }
 
         /* SIDEBAR */
+
         .sidebar {
             width: var(--sidebar-w);
             min-height: 100vh;
@@ -43,7 +57,9 @@
             display: flex;
             flex-direction: column;
             position: fixed;
-            left: 0; top: 0; bottom: 0;
+            left: 0;
+            top: 0;
+            bottom: 0;
             z-index: 100;
         }
 
@@ -56,17 +72,29 @@
         }
 
         .brand-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--gold), var(--gold-dark));
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Syne', sans-serif;
-            font-weight: 800; font-size: 16px; color: var(--black);
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--black);
             flex-shrink: 0;
         }
 
-        .brand-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
-        .brand-text span { color: var(--gold); }
+        .brand-text {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .brand-text span {
+            color: var(--gold);
+        }
 
         .nav-section {
             padding: 24px 16px 8px;
@@ -103,12 +131,16 @@
         }
 
         .nav-item.active {
-            background: rgba(201,168,76,0.1);
+            background: rgba(201, 168, 76, 0.1);
             color: var(--gold);
-            border: 1px solid rgba(201,168,76,0.2);
+            border: 1px solid rgba(201, 168, 76, 0.2);
         }
 
-        .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+        .nav-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
 
         .sidebar-footer {
             margin-top: auto;
@@ -127,27 +159,54 @@
         }
 
         .user-avatar {
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--gold), var(--gold-dark));
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Syne', sans-serif;
-            font-weight: 700; font-size: 14px; color: var(--black);
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--black);
             flex-shrink: 0;
         }
 
-        .user-info { flex: 1; min-width: 0; }
-        .user-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .user-role { font-size: 11px; color: var(--gold); }
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: var(--gold);
+        }
 
         .logout-btn {
-            background: none; border: none; color: var(--text-muted);
-            cursor: pointer; font-size: 18px; padding: 4px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
             transition: color 0.2s;
         }
-        .logout-btn:hover { color: var(--red); }
+
+        .logout-btn:hover {
+            color: var(--red);
+        }
 
         /* MAIN */
+
         .main {
             margin-left: var(--sidebar-w);
             flex: 1;
@@ -156,6 +215,7 @@
         }
 
         /* TOPBAR */
+
         .topbar {
             padding: 24px 40px;
             border-bottom: 1px solid var(--border);
@@ -168,39 +228,63 @@
             z-index: 50;
         }
 
-        .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
-        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
 
-        .topbar-actions { display: flex; align-items: center; gap: 16px; }
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
         .status-pill {
-            display: flex; align-items: center; gap: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 16px;
-            background: rgba(76,175,80,0.1);
-            border: 1px solid rgba(76,175,80,0.25);
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.25);
             border-radius: 999px;
-            font-size: 12px; color: var(--green);
+            font-size: 12px;
+            color: var(--green);
         }
 
         .status-dot {
-            width: 6px; height: 6px;
+            width: 6px;
+            height: 6px;
             background: var(--green);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
         }
 
         /* CONTENT */
+
         .content {
             padding: 40px;
             flex: 1;
         }
 
-        /* KPI CARDS */
+        /* KPI */
+
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -220,16 +304,22 @@
 
         .kpi-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(201,168,76,0.35);
+            border-color: rgba(201, 168, 76, 0.35);
         }
 
         .kpi-card::before {
             content: '';
             position: absolute;
-            top: 0; right: 0;
-            width: 100px; height: 100px;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+            background: radial-gradient(
+                    circle,
+                    rgba(201, 168, 76, 0.06) 0%,
+                    transparent 70%
+            );
         }
 
         .kpi-icon {
@@ -260,10 +350,16 @@
             gap: 4px;
         }
 
-        .kpi-change.up { color: var(--green); }
-        .kpi-change.down { color: var(--red); }
+        .kpi-change.up {
+            color: var(--green);
+        }
 
-        /* CHARTS GRID */
+        .kpi-change.down {
+            color: var(--red);
+        }
+
+        /* CHARTS */
+
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -291,7 +387,11 @@
             font-weight: 700;
         }
 
-        .card-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
 
         .badge {
             padding: 4px 12px;
@@ -300,12 +400,34 @@
             font-weight: 500;
         }
 
-        .badge-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
-        .badge-green { background: rgba(76,175,80,0.15); color: var(--green); }
+        .badge-gold {
+            background: rgba(201, 168, 76, 0.15);
+            color: var(--gold);
+        }
 
-        .chart-wrapper { position: relative; height: 240px; }
+        .badge-green {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--green);
+        }
+
+        /*
+         * IMPORTANTE:
+         * O canvas precisa ter uma altura real.
+         */
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        .chart-wrapper canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
 
         /* TABLE */
+
         .table-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -313,7 +435,10 @@
             padding: 28px;
         }
 
-        .table-wrapper { overflow-x: auto; margin-top: 4px; }
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 4px;
+        }
 
         table {
             width: 100%;
@@ -334,11 +459,16 @@
         td {
             padding: 16px;
             font-size: 14px;
-            border-bottom: 1px solid rgba(201,168,76,0.06);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.06);
         }
 
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(201,168,76,0.03); }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(201, 168, 76, 0.03);
+        }
 
         .tx-type {
             display: inline-flex;
@@ -350,12 +480,30 @@
             font-weight: 500;
         }
 
-        .tx-deposito { background: rgba(76,175,80,0.12); color: var(--green); }
-        .tx-saque { background: rgba(244,67,54,0.12); color: var(--red); }
-        .tx-transferencia { background: rgba(33,150,243,0.12); color: var(--blue); }
+        .tx-deposito {
+            background: rgba(76, 175, 80, 0.12);
+            color: var(--green);
+        }
 
-        .tx-value.positive { color: var(--green); font-weight: 600; }
-        .tx-value.negative { color: var(--red); font-weight: 600; }
+        .tx-saque {
+            background: rgba(244, 67, 54, 0.12);
+            color: var(--red);
+        }
+
+        .tx-transferencia {
+            background: rgba(33, 150, 243, 0.12);
+            color: var(--blue);
+        }
+
+        .tx-value.positive {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .tx-value.negative {
+            color: var(--red);
+            font-weight: 600;
+        }
 
         .account-chip {
             background: var(--surface2);
@@ -366,252 +514,801 @@
             font-family: monospace;
             color: var(--gold);
         }
+
+        /* RESPONSIVO */
+
+        @media (max-width: 1100px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 20px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+    ```
+
 </head>
+
 <body>
 
 <!-- SIDEBAR -->
+
 <aside class="sidebar">
+
+    ```
     <div class="sidebar-brand">
-        <div class="brand-icon">G</div>
-        <div class="brand-text">GMS <span>BANK</span></div>
+
+        <div class="brand-icon">
+            G
+        </div>
+
+        <div class="brand-text">
+            GMS <span>BANK</span>
+        </div>
+
     </div>
 
     <div class="nav-section">
-        <div class="nav-label">Principal</div>
+
+        <div class="nav-label">
+            Principal
+        </div>
+
         <a href="/dashboard" class="nav-item active">
-            <span class="nav-icon">📊</span> Dashboard
+            <span class="nav-icon">📊</span>
+            Dashboard
         </a>
+
         <a href="/clientes" class="nav-item">
-            <span class="nav-icon">👤</span> Clientes
+            <span class="nav-icon">👤</span>
+            Clientes
         </a>
+
         <a href="/contas" class="nav-item">
-            <span class="nav-icon">🏦</span> Contas
+            <span class="nav-icon">🏦</span>
+            Contas
         </a>
+
         <a href="/transacoes" class="nav-item">
-            <span class="nav-icon">💸</span> Transações
+            <span class="nav-icon">💸</span>
+            Transações
         </a>
+
     </div>
 
     <div class="nav-section">
-        <div class="nav-label">Gestão</div>
+
+        <div class="nav-label">
+            Gestão
+        </div>
+
         <a href="/usuarios" class="nav-item">
-            <span class="nav-icon">👥</span> Usuários
+            <span class="nav-icon">👥</span>
+            Usuários
         </a>
+
         <a href="/relatorios" class="nav-item">
-            <span class="nav-icon">📈</span> Relatórios
+            <span class="nav-icon">📈</span>
+            Relatórios
         </a>
+
     </div>
 
     <div class="sidebar-footer">
+
         <div class="user-card">
-            <div class="user-avatar" th:text="${#strings.substring(usuario.nome_usuarios, 0, 1)}" th:if="${usuario != null}">A</div>
-            <div class="user-info">
-                <div class="user-name" th:text="${usuario != null ? usuario.nome_usuarios : 'Usuário'}">Admin</div>
-                <div class="user-role">Administrador</div>
+
+            <div
+                    class="user-avatar"
+                    th:if="${usuario != null}"
+                    th:text="${#strings.substring(usuario.nome_usuarios, 0, 1)}">
+                A
             </div>
-            <form th:action="@{/logout}" method="post" style="display:inline">
-                <button class="logout-btn" type="submit" title="Sair">⏻</button>
+
+            <div
+                    class="user-avatar"
+                    th:if="${usuario == null}">
+                A
+            </div>
+
+            <div class="user-info">
+
+                <div
+                        class="user-name"
+                        th:text="${usuario != null ? usuario.nome_usuarios : 'Usuário'}">
+                    Admin
+                </div>
+
+                <div class="user-role">
+                    Administrador
+                </div>
+
+            </div>
+
+            <form
+                    th:action="@{/logout}"
+                    method="post"
+                    style="display:inline">
+
+                <button
+                        class="logout-btn"
+                        type="submit"
+                        title="Sair">
+                    ⏻
+                </button>
+
             </form>
+
         </div>
+
     </div>
+    ```
+
 </aside>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
+
 <div class="main">
+
+    ```
+    <!-- TOPBAR -->
+
     <div class="topbar">
+
         <div>
-            <div class="page-title">Dashboard</div>
-            <div class="page-subtitle">Visão geral das operações bancárias</div>
-        </div>
-        <div class="topbar-actions">
-            <div class="status-pill">
-                <div class="status-dot"></div>
-                Sistema Online
+
+            <div class="page-title">
+                Dashboard
             </div>
+
+            <div class="page-subtitle">
+                Visão geral das operações bancárias
+            </div>
+
         </div>
+
+        <div class="topbar-actions">
+
+            <div class="status-pill">
+
+                <div class="status-dot"></div>
+
+                Sistema Online
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- CONTENT -->
 
     <div class="content">
 
-        <!-- KPI CARDS -->
+        <!-- KPI -->
+
         <div class="kpi-grid">
+
             <div class="kpi-card">
-                <div class="kpi-icon">👥</div>
-                <div class="kpi-label">Total de Clientes</div>
-                <div class="kpi-value" th:text="${totalClientes != null ? totalClientes : '—'}">3</div>
-                <div class="kpi-change up">↑ Ativos no sistema</div>
+
+                <div class="kpi-icon">
+                    👥
+                </div>
+
+                <div class="kpi-label">
+                    Total de Clientes
+                </div>
+
+                <div
+                        class="kpi-value"
+                        th:text="${totalClientes != null ? totalClientes : '—'}">
+                    3
+                </div>
+
+                <div class="kpi-change up">
+                    ↑ Ativos no sistema
+                </div>
+
             </div>
+
+
             <div class="kpi-card">
-                <div class="kpi-icon">🏦</div>
-                <div class="kpi-label">Contas Abertas</div>
-                <div class="kpi-value" th:text="${totalContas != null ? totalContas : '—'}">6</div>
-                <div class="kpi-change up">↑ Todas ativas</div>
+
+                <div class="kpi-icon">
+                    🏦
+                </div>
+
+                <div class="kpi-label">
+                    Contas Abertas
+                </div>
+
+                <div
+                        class="kpi-value"
+                        th:text="${totalContas != null ? totalContas : '—'}">
+                    6
+                </div>
+
+                <div class="kpi-change up">
+                    ↑ Todas ativas
+                </div>
+
             </div>
+
+
             <div class="kpi-card">
-                <div class="kpi-icon">💸</div>
-                <div class="kpi-label">Transações</div>
-                <div class="kpi-value" th:text="${totalTransacoes != null ? totalTransacoes : '—'}">5</div>
-                <div class="kpi-change up">↑ Processadas</div>
+
+                <div class="kpi-icon">
+                    💸
+                </div>
+
+                <div class="kpi-label">
+                    Transações
+                </div>
+
+                <div
+                        class="kpi-value"
+                        th:text="${totalTransacoes != null ? totalTransacoes : '—'}">
+                    5
+                </div>
+
+                <div class="kpi-change up">
+                    ↑ Processadas
+                </div>
+
             </div>
+
+
             <div class="kpi-card">
-                <div class="kpi-icon">💰</div>
-                <div class="kpi-label">Saldo Total</div>
-                <div class="kpi-value">R$ 1,02M</div>
-                <div class="kpi-change up">↑ Em custódia</div>
+
+                <div class="kpi-icon">
+                    💰
+                </div>
+
+                <div class="kpi-label">
+                    Saldo Total
+                </div>
+
+                <div class="kpi-value">
+                    R$ 1,02M
+                </div>
+
+                <div class="kpi-change up">
+                    ↑ Em custódia
+                </div>
+
             </div>
+
         </div>
 
-        <!-- CHARTS -->
+
+        <!-- GRÁFICOS -->
+
         <div class="charts-grid">
-            <div class="chart-card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Movimentações Mensais</div>
-                        <div class="card-subtitle">Depósitos vs Saques vs Transferências</div>
-                    </div>
-                    <span class="badge badge-gold">2026</span>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="chartMovimentacoes"></canvas>
-                </div>
-            </div>
+
+            <!-- GRÁFICO DE MOVIMENTAÇÕES -->
 
             <div class="chart-card">
+
                 <div class="card-header">
+
                     <div>
-                        <div class="card-title">Tipos de Conta</div>
-                        <div class="card-subtitle">Distribuição</div>
+
+                        <div class="card-title">
+                            Movimentações Mensais
+                        </div>
+
+                        <div class="card-subtitle">
+                            Depósitos vs Saques vs Transferências
+                        </div>
+
                     </div>
-                    <span class="badge badge-green">Ativo</span>
+
+                    <span class="badge badge-gold">
+                    2026
+                </span>
+
                 </div>
+
                 <div class="chart-wrapper">
-                    <canvas id="chartTiposConta"></canvas>
+
+                    <canvas id="chartMovimentacoes"></canvas>
+
                 </div>
+
             </div>
+
+
+            <!-- GRÁFICO DE TIPOS DE CONTA -->
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <div class="card-title">
+                            Tipos de Conta
+                        </div>
+
+                        <div class="card-subtitle">
+                            Distribuição
+                        </div>
+
+                    </div>
+
+                    <span class="badge badge-green">
+                    Ativo
+                </span>
+
+                </div>
+
+                <div class="chart-wrapper">
+
+                    <canvas id="chartTiposConta"></canvas>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- RECENT TRANSACTIONS TABLE -->
+
+        <!-- TRANSAÇÕES -->
+
         <div class="table-card">
+
             <div class="card-header">
+
                 <div>
-                    <div class="card-title">Transações Recentes</div>
-                    <div class="card-subtitle">Últimas movimentações registradas</div>
+
+                    <div class="card-title">
+                        Transações Recentes
+                    </div>
+
+                    <div class="card-subtitle">
+                        Últimas movimentações registradas
+                    </div>
+
                 </div>
-                <a href="/transacoes" style="text-decoration:none">
-                    <span class="badge badge-gold">Ver todas →</span>
+
+                <a
+                        href="/transacoes"
+                        style="text-decoration:none">
+
+                <span class="badge badge-gold">
+                    Ver todas →
+                </span>
+
                 </a>
+
             </div>
+
+
             <div class="table-wrapper">
+
                 <table>
+
                     <thead>
+
                     <tr>
+
                         <th>ID</th>
                         <th>Tipo</th>
                         <th>Conta Origem</th>
                         <th>Valor</th>
                         <th>Saldo Após</th>
                         <th>Data</th>
+
                     </tr>
+
                     </thead>
+
+
                     <tbody>
                     <tr th:each="tx : ${transacoes}">
-                        <td th:text="'#' + ${tx.PK_id_transacoes}">#1</td>
+                        <td th:text="'#' + ${tx[0]}">#1</td>
                         <td>
-                            <span class="tx-type tx-deposito" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}">⬆ Depósito</span>
-                            <span class="tx-type tx-saque" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Saque'}">⬇ Saque</span>
-                            <span class="tx-type tx-transferencia" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Transferência'}">↔ Transferência</span>
+                            <span class="tx-type tx-deposito" th:if="${tx[4] == 'Depósito'}">⬆ Depósito</span>
+                            <span class="tx-type tx-saque" th:if="${tx[4] == 'Saque'}">⬇ Saque</span>
+                            <span class="tx-type tx-transferencia" th:if="${tx[4] == 'Transferência'}">↔ Transferência</span>
                         </td>
-                        <td><span class="account-chip" th:text="${tx.FK_id_conta_origem.numero_contas}">0001-1</span></td>
-                        <td class="tx-value positive" th:text="'R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}" >R$ 0,00</td>
-                        <td th:text="'R$ ' + ${#numbers.formatDecimal(tx.saldo_apos_transacoes, 1, 2)}">R$ 0,00</td>
-                        <td th:text="${#dates.format(tx.realizado_em_transacoes, 'dd/MM/yyyy HH:mm')}">01/01/2026</td>
+                        <td><span class="account-chip" th:text="${tx[6]}">0001-1</span></td>
+                        <td class="tx-value positive" th:text="'R$ ' + ${tx[1]}">R$ 0,00</td>
+                        <td th:text="${tx[2]}">01/01/2026</td>
                     </tr>
-                    <!-- Fallback se não houver dados -->
                     <tr th:if="${#lists.isEmpty(transacoes)}">
                         <td colspan="6" style="text-align:center; color: var(--text-muted); padding: 40px;">
                             Nenhuma transação registrada
                         </td>
                     </tr>
                     </tbody>
+
                 </table>
+
             </div>
+
         </div>
 
     </div>
+    ```
+
 </div>
 
+<!-- JAVASCRIPT DOS GRÁFICOS -->
+
 <script>
-    const gold = '#C9A84C';
-    const goldLight = 'rgba(201,168,76,0.15)';
-    const green = '#4CAF50';
-    const red = '#F44336';
-    const blue = '#2196F3';
-    const textMuted = '#6A6870';
 
-    Chart.defaults.color = textMuted;
-    Chart.defaults.borderColor = 'rgba(201,168,76,0.1)';
-    Chart.defaults.font.family = 'DM Sans';
+    document.addEventListener("DOMContentLoaded", function () {
 
-    // LINE CHART
-    new Chart(document.getElementById('chartMovimentacoes'), {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-            datasets: [
-                {
-                    label: 'Depósitos',
-                    data: [12000, 19000, 8000, 15000, 22000, 11000],
-                    backgroundColor: 'rgba(76,175,80,0.7)',
-                    borderRadius: 6,
+        /*
+         * Verifica se o Chart.js foi carregado.
+         */
+        if (typeof Chart === "undefined") {
+
+            console.error("Chart.js não foi carregado.");
+
+            const cards = document.querySelectorAll(".chart-wrapper");
+
+            cards.forEach(function (card) {
+
+                card.innerHTML = `
+                    <div style="
+                        height:100%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        color:#6A6870;
+                        text-align:center;
+                        padding:20px;
+                    ">
+                        Não foi possível carregar os gráficos.
+                    </div>
+                `;
+
+            });
+
+            return;
+        }
+
+
+        /*
+         * CONFIGURAÇÕES GERAIS
+         */
+
+        Chart.defaults.color = "#6A6870";
+
+        Chart.defaults.borderColor =
+            "rgba(201,168,76,0.10)";
+
+        Chart.defaults.font.family =
+            "DM Sans";
+
+
+        /*
+         * CORES
+         */
+
+        const gold = "#C9A84C";
+        const green = "#4CAF50";
+        const red = "#F44336";
+        const blue = "#2196F3";
+
+
+        /*
+         * GRÁFICO 1
+         *
+         * Movimentações mensais
+         */
+
+        const movimentacoesCanvas =
+            document.getElementById("chartMovimentacoes");
+
+
+        if (movimentacoesCanvas) {
+
+            new Chart(movimentacoesCanvas, {
+
+                type: "bar",
+
+                data: {
+
+                    labels: [
+                        "Jan",
+                        "Fev",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Jun"
+                    ],
+
+                    datasets: [
+
+                        {
+                            label: "Depósitos",
+
+                            data: [
+                                12000,
+                                19000,
+                                8000,
+                                15000,
+                                22000,
+                                11000
+                            ],
+
+                            backgroundColor:
+                                "rgba(76,175,80,0.75)",
+
+                            borderColor:
+                            green,
+
+                            borderWidth: 1,
+
+                            borderRadius: 6
+                        },
+
+
+                        {
+                            label: "Saques",
+
+                            data: [
+                                5000,
+                                8000,
+                                4000,
+                                9000,
+                                7000,
+                                6000
+                            ],
+
+                            backgroundColor:
+                                "rgba(244,67,54,0.75)",
+
+                            borderColor:
+                            red,
+
+                            borderWidth: 1,
+
+                            borderRadius: 6
+                        },
+
+
+                        {
+                            label: "Transferências",
+
+                            data: [
+                                3000,
+                                5000,
+                                2000,
+                                4000,
+                                6000,
+                                3500
+                            ],
+
+                            backgroundColor:
+                                "rgba(33,150,243,0.75)",
+
+                            borderColor:
+                            blue,
+
+                            borderWidth: 1,
+
+                            borderRadius: 6
+                        }
+
+                    ]
+
                 },
-                {
-                    label: 'Saques',
-                    data: [5000, 8000, 4000, 9000, 7000, 6000],
-                    backgroundColor: 'rgba(244,67,54,0.7)',
-                    borderRadius: 6,
-                },
-                {
-                    label: 'Transferências',
-                    data: [3000, 5000, 2000, 4000, 6000, 3500],
-                    backgroundColor: 'rgba(33,150,243,0.7)',
-                    borderRadius: 6,
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        mode: "index",
+                        intersect: false
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true,
+
+                            position: "top",
+
+                            labels: {
+                                boxWidth: 12,
+                                padding: 16
+                            }
+
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function (context) {
+
+                                    const value =
+                                        context.parsed.y || 0;
+
+                                    return context.dataset.label +
+                                        ": R$ " +
+                                        value.toLocaleString(
+                                            "pt-BR",
+                                            {
+                                                minimumFractionDigits: 2
+                                            }
+                                        );
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+                                color:
+                                    "rgba(201,168,76,0.06)"
+                            }
+
+                        },
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            grid: {
+                                color:
+                                    "rgba(201,168,76,0.06)"
+                            },
+
+                            ticks: {
+
+                                callback: function (value) {
+
+                                    return "R$ " +
+                                        (value / 1000) +
+                                        "k";
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } } },
-            scales: {
-                x: { grid: { color: 'rgba(201,168,76,0.06)' } },
-                y: { grid: { color: 'rgba(201,168,76,0.06)' }, ticks: { callback: v => 'R$ ' + (v/1000) + 'k' } }
-            }
+
+            });
+
         }
+
+
+        /*
+         * GRÁFICO 2
+         *
+         * Distribuição dos tipos de conta
+         */
+
+        const tiposContaCanvas =
+            document.getElementById("chartTiposConta");
+
+
+        if (tiposContaCanvas) {
+
+            new Chart(tiposContaCanvas, {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Corrente",
+                        "Poupança",
+                        "Salário"
+                    ],
+
+                    datasets: [
+
+                        {
+
+                            data: [
+                                3,
+                                1,
+                                2
+                            ],
+
+                            backgroundColor: [
+                                gold,
+                                green,
+                                blue
+                            ],
+
+                            borderColor:
+                                "#12121A",
+
+                            borderWidth: 3,
+
+                            hoverOffset: 8
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "70%",
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "bottom",
+
+                            labels: {
+
+                                boxWidth: 12,
+
+                                padding: 16
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
     });
 
-    // DONUT CHART
-    new Chart(document.getElementById('chartTiposConta'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Corrente', 'Poupança', 'Salário'],
-            datasets: [{
-                data: [3, 1, 2],
-                backgroundColor: [gold, green, blue],
-                borderColor: '#12121A',
-                borderWidth: 3,
-                hoverOffset: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
-            }
-        }
-    });
-</script>
+</script>cat
+
 </body>
 </html>

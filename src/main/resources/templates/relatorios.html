@@ -164,16 +164,16 @@
                     <tbody>
                     <tr th:each="tx : ${ultimasTransacoes}">
                         <td>
-                            <span class="tx-type tx-deposito" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}">⬆ Depósito</span>
-                            <span class="tx-type tx-saque" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Saque'}">⬇ Saque</span>
-                            <span class="tx-type tx-transferencia" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Transferência'}">↔ Transferência</span>
+                            <span class="tx-type tx-deposito" th:if="${tx[4] == 'Depósito'}">⬆ Depósito</span>
+                            <span class="tx-type tx-saque" th:if="${tx[4] == 'Saque'}">⬇ Saque</span>
+                            <span class="tx-type tx-transferencia" th:if="${tx[4] == 'Transferência'}">↔ Transferência</span>
                         </td>
-                        <td><span class="account-chip" th:text="${tx.FK_id_conta_origem.numero_contas}">—</span></td>
+                        <td><span class="account-chip" th:text="${tx[6]}">—</span></td>
                         <td>
-                            <span class="valor-positive" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'+ R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
-                            <span class="valor-negative" th:unless="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'- R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                            <span class="valor-positive" th:if="${tx[4] == 'Depósito'}" th:text="'+ R$ ' + ${tx[1]}"></span>
+                            <span class="valor-negative" th:unless="${tx[4] == 'Depósito'}" th:text="'- R$ ' + ${tx[1]}"></span>
                         </td>
-                        <td th:text="${#dates.format(tx.realizado_em_transacoes, 'dd/MM/yy HH:mm')}">—</td>
+                        <td th:text="${tx[2]}">—</td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(ultimasTransacoes)}">
                         <td colspan="4"><div class="empty-state">Nenhuma transação ainda.</div></td>
@@ -200,9 +200,9 @@
                     <tbody>
                     <tr th:each="conta, iterStat : ${contasMaiorSaldo}">
                         <td><span class="rank-num" th:text="${iterStat.count}">1</span></td>
-                        <td><span class="account-chip" th:text="${conta.numero_contas}">—</span></td>
-                        <td th:text="${conta.FK_id_clientes.nome_clientes}">—</td>
-                        <td class="valor-positive" th:text="'R$ ' + ${#numbers.formatDecimal(conta.saldo_contas, 1, 2)}">—</td>
+                        <td><span class="account-chip" th:text="${conta[1]}">—</span></td>
+                        <td th:text="${conta[4]}">—</td>
+                        <td class="valor-positive" th:text="'R$ ' + ${conta[2]}">—</td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(contasMaiorSaldo)}">
                         <td colspan="4"><div class="empty-state">Nenhuma conta cadastrada.</div></td>
@@ -233,25 +233,26 @@
                 </thead>
                 <tbody>
                 <tr th:each="tx : ${todasTransacoes}">
-                    <td th:text="'#' + ${tx.PK_id_transacoes}">#1</td>
+                    <td th:text="'#' + ${tx[0]}">#1</td>
                     <td>
-                        <span class="tx-type tx-deposito" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}">⬆ Depósito</span>
-                        <span class="tx-type tx-saque" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Saque'}">⬇ Saque</span>
-                        <span class="tx-type tx-transferencia" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Transferência'}">↔ Transferência</span>
+                        <span class="tx-type tx-deposito" th:if="${tx[1] == 'Depósito'}">⬆ Depósito</span>
+                        <span class="tx-type tx-saque" th:if="${tx[1] == 'Saque'}">⬇ Saque</span>
+                        <span class="tx-type tx-transferencia" th:if="${tx[1] == 'Transferência'}">↔ Transferência</span>
                     </td>
-                    <td><span class="account-chip" th:text="${tx.FK_id_conta_origem.numero_contas}">—</span></td>
+                    <td><span class="account-chip" th:text="${tx[2]}">—</span></td>
                     <td>
-                        <span class="account-chip" th:if="${tx.FK_id_conta_destino != null}" th:text="${tx.FK_id_conta_destino.numero_contas}">—</span>
-                        <span th:unless="${tx.FK_id_conta_destino != null}" style="color: var(--text-muted)">—</span>
+                        <span class="account-chip" th:if="${tx[3] != null}" th:text="${tx[3]}">—</span>
+                        <span th:unless="${tx[3] != null}" style="color: var(--text-muted)">—</span>
                     </td>
                     <td>
-                        <span class="valor-positive" th:if="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'+ R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
-                        <span class="valor-negative" th:unless="${tx.FK_id_tipos_transacao.nome_tipos_transacao == 'Depósito'}" th:text="'- R$ ' + ${#numbers.formatDecimal(tx.valor_transacoes, 1, 2)}"></span>
+                        <span class="valor-positive" th:if="${tx[1] == 'Depósito'}" th:text="'+ R$ ' + ${tx[4]}"></span>
+                        <span class="valor-negative" th:unless="${tx[1] == 'Depósito'}" th:text="'- R$ ' + ${tx[4]}"></span>
                     </td>
-                    <td th:text="'R$ ' + ${#numbers.formatDecimal(tx.saldo_apos_transacoes, 1, 2)}">R$ 0,00</td>
-                    <td th:text="${tx.descricao_transacoes != null ? tx.descricao_transacoes : '—'}">—</td>
-                    <td th:text="${#dates.format(tx.realizado_em_transacoes, 'dd/MM/yyyy HH:mm')}">—</td>
+                    <td th:text="'R$ ' + ${tx[5]}">R$ 0,00</td>
+                    <td th:text="${tx[6] != null ? tx[6] : '—'}">—</td>
+                    <td th:text="${tx[7]}">—</td>
                 </tr>
+
                 <tr th:if="${#lists.isEmpty(todasTransacoes)}">
                     <td colspan="8"><div class="empty-state">Nenhuma transação registrada.</div></td>
                 </tr>
